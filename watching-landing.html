@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ساعة النخبة | تجربة فاخرة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #c5a059;
+            --dark-bg: #0a0a0a;
+            --glass: rgba(255, 255, 255, 0.1);
+            --text-light: #e0e0e0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* خلفية متحركة بسيطة */
+        .bg-gradient {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #0a0a0a 100%);
+            z-index: -1;
+        }
+
+        /* قسم الهيرو المطور */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 800;
+            background: linear-gradient(to right, #fff, var(--gold), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        /* زر Call to Action عصري */
+        .cta-btn {
+            background: var(--gold);
+            color: #000;
+            padding: 18px 45px;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 50px;
+            box-shadow: 0 10px 20px rgba(197, 160, 89, 0.3);
+            transition: all 0.4s ease;
+            font-size: 1.1rem;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(197, 160, 89, 0.5);
+            background: #fff;
+        }
+
+        /* قسم المميزات بنظام Glassmorphism */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 80px 10% ;
+        }
+
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            border-color: var(--gold);
+            transform: translateY(-10px);
+        }
+
+        .card h3 {
+            color: var(--gold);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        /* استجابة الجوال */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-gradient"></div>
+
+    <section class="hero">
+        <h1>إتقان الوقت بالفخامة</h1>
+        <p>اكتشف تشكيلة "Golden Nj" الجديدة. حيث يلتقي التراث العريق بالتقنية الحديثة في تصميم واحد مذهل.</p>
+        <a href="#order" class="cta-btn">امتلكها الآن</a>
+    </section>
+
+    <section class="features">
+        <div class="card">
+            <h3>هيكل تيتانيوم</h3>
+            <p>خفة متناهية في الوزن مع صلابة لا تقهر، صُممت لتدوم مدى الحياة.</p>
+        </div>
+        <div class="card">
+            <h3>حركة أوتوماتيكية</h3>
+            <p>دقة سويسرية متناهية لا تحتاج إلى بطارية، تعمل بنبض معصمك.</p>
+        </div>
+        <div class="card">
+            <h3>إصدار محدود</h3>
+            <p>كن واحداً من 100 شخص فقط حول العالم يمتلكون هذه التحفة الفنية.</p>
+        </div>
+    </section>
+
+</body>
+                                    </html>
