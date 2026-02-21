@@ -1,264 +1,341 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>توصيل سريع - السائق التفاعلي</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <style>
-        :root {
-            --primary: #FF7B00;
-            --secondary: #2A2A2A;
-            --bg-color: #F4F7F6;
-            --road: #8C8C8C;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Service Livreur</title>
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Cairo', sans-serif;
-        }
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
 
-        body {
-            background-color: var(--bg-color);
-            overflow-x: hidden;
-            color: var(--secondary);
-        }
+<style>
+/* =========================
+   GLOBAL
+========================= */
 
-        /* حاوية التمرير */
-        .scroll-container {
-            position: relative;
-            height: 400vh; /* لخلق مساحة للتمرير */
-        }
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Cairo',sans-serif;
+}
 
-        /* المشهد الثابت الذي يحتوي الأنيميشن */
-        .scene {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            perspective: 1000px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            z-index: 1;
-        }
+body{
+  background:#0f172a;
+  color:white;
+  overflow-x:hidden;
+}
 
-        /* النصوص المتغيرة */
-        .text-content {
-            position: absolute;
-            top: 20%;
-            text-align: center;
-            z-index: 10;
-        }
+/* =========================
+   VIDEO LIKE BACKGROUND
+========================= */
 
-        .text-content h1 {
-            font-size: 4rem;
-            font-weight: 900;
-            color: var(--secondary);
-            text-shadow: 2px 2px 0px #fff, 4px 4px 0px rgba(0,0,0,0.1);
-            opacity: 1;
-        }
+.hero{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:60px 8%;
+  position:relative;
+  background:linear-gradient(120deg,#0f172a,#020617);
+  overflow:hidden;
+}
 
-        /* تصميم الشارع 3D */
-        .road {
-            position: absolute;
-            bottom: -20vh;
-            width: 200vw;
-            height: 50vh;
-            background: var(--road);
-            transform: rotateX(60deg);
-            transform-origin: bottom;
-            border-top: 10px solid #fff;
-            box-shadow: inset 0 20px 50px rgba(0,0,0,0.5);
-        }
+/* animated gradient */
+.hero::before{
+  content:"";
+  position:absolute;
+  width:600px;
+  height:600px;
+  background:radial-gradient(circle,#0ea5e9,transparent 60%);
+  top:-200px;
+  left:-200px;
+  filter:blur(120px);
+  animation:floatBg 12s ease-in-out infinite;
+}
 
-        .road::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 100%;
-            height: 10px;
-            background: dashed 30px #fff;
-            transform: translateY(-50%);
-        }
+@keyframes floatBg{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(40px);}
+}
 
-        /* شخصية المندوب (دراجة نارية كارتونية مبسطة بـ CSS/SVG) */
-        .delivery-guy {
-            position: absolute;
-            bottom: 20%;
-            right: -20%; /* يبدأ خارج الشاشة */
-            width: 150px;
-            height: 150px;
-            z-index: 5;
-            transform-style: preserve-3d;
-            filter: drop-shadow(10px 20px 10px rgba(0,0,0,0.3));
-            cursor: pointer;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+/* =========================
+   TEXT SIDE
+========================= */
 
-        .delivery-guy:hover {
-            transform: scale(1.1) rotate(-5deg) translateY(-10px) !important;
-        }
+.hero-text{
+  max-width:520px;
+  z-index:2;
+}
 
-        /* SVG بسيط للدراجة */
-        .bike-svg {
-            width: 100%;
-            height: 100%;
-        }
+.badge{
+  background:rgba(14,165,233,0.15);
+  color:#38bdf8;
+  padding:8px 18px;
+  border-radius:999px;
+  display:inline-block;
+  margin-bottom:20px;
+  font-size:14px;
+}
 
-        /* الطرود المتناثرة في الخلفية (3D Floating) */
-        .package {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            background: #D4A373;
-            border: 3px solid #bc8a59;
-            border-radius: 8px;
-            box-shadow: 5px 5px 0px rgba(0,0,0,0.1);
-            opacity: 0;
-            z-index: 2;
-        }
+.hero h1{
+  font-size:48px;
+  line-height:1.2;
+  margin-bottom:20px;
+}
 
-        .p1 { top: 30%; left: 20%; transform: rotate(15deg); }
-        .p2 { top: 50%; right: 15%; transform: rotate(-20deg); }
-        .p3 { top: 70%; left: 30%; transform: rotate(45deg); }
+.hero p{
+  opacity:.8;
+  margin-bottom:30px;
+  font-size:18px;
+}
 
-        /* الأزرار التفاعلية 3D */
-        .btn-3d {
-            position: absolute;
-            bottom: 10%;
-            padding: 15px 40px;
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: #fff;
-            background: var(--primary);
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            box-shadow: 0 10px 0 #cc6200, 0 20px 20px rgba(0,0,0,0.2);
-            transition: all 0.1s;
-            z-index: 20;
-            opacity: 0; /* يظهر في النهاية */
-        }
+/* =========================
+   CTA BUTTON
+========================= */
 
-        .btn-3d:active {
-            transform: translateY(10px);
-            box-shadow: 0 0 0 #cc6200, 0 10px 10px rgba(0,0,0,0.2);
-        }
+.cta{
+  background:linear-gradient(135deg,#0ea5e9,#22c55e);
+  padding:16px 36px;
+  border:none;
+  border-radius:14px;
+  color:white;
+  font-size:18px;
+  cursor:pointer;
+  transition:.3s;
+  box-shadow:0 10px 30px rgba(14,165,233,.4);
+}
 
-    </style>
+.cta:hover{
+  transform:translateY(-4px) scale(1.05);
+}
+
+/* =========================
+   3D CHARACTER
+========================= */
+
+.hero-img{
+  width:420px;
+  transform-style:preserve-3d;
+  transition:transform .2s ease;
+  z-index:2;
+}
+
+.hero-img img{
+  width:100%;
+  filter:drop-shadow(0 40px 60px rgba(0,0,0,.6));
+  animation:float 6s ease-in-out infinite;
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-20px);}
+}
+
+/* =========================
+   FEATURES
+========================= */
+
+.features{
+  padding:100px 8%;
+  background:#020617;
+}
+
+.section-title{
+  text-align:center;
+  font-size:36px;
+  margin-bottom:60px;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:30px;
+}
+
+.card{
+  background:rgba(255,255,255,0.03);
+  padding:30px;
+  border-radius:20px;
+  text-align:center;
+  transition:.35s;
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,0.05);
+}
+
+.card:hover{
+  transform:translateY(-10px) scale(1.03);
+  border-color:#0ea5e9;
+}
+
+.card img{
+  width:90px;
+  margin-bottom:20px;
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+  padding:80px 8%;
+  display:flex;
+  justify-content:space-around;
+  flex-wrap:wrap;
+  gap:40px;
+}
+
+.stat{
+  text-align:center;
+}
+
+.stat h3{
+  font-size:42px;
+  color:#22c55e;
+}
+
+.stat p{
+  opacity:.7;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+  text-align:center;
+  padding:40px;
+  opacity:.6;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:900px){
+
+.hero{
+  flex-direction:column;
+  text-align:center;
+  gap:40px;
+}
+
+.hero h1{
+  font-size:36px;
+}
+
+.hero-img{
+  width:280px;
+}
+
+}
+</style>
 </head>
+
 <body>
 
-    <div class="scroll-container">
-        <div class="scene">
-            
-            <div class="text-content">
-                <h1 id="main-text">طردك في أمان...</h1>
-            </div>
+<!-- =========================
+     HERO
+========================= -->
 
-            <div class="package p1"></div>
-            <div class="package p2"></div>
-            <div class="package p3"></div>
+<section class="hero">
 
-            <div class="road"></div>
+  <div class="hero-text">
+    <div class="badge">🚀 خدمة توصيل سريعة</div>
 
-            <div class="delivery-guy" id="livreur" onclick="honk()">
-                <svg class="bike-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="40" cy="150" r="30" fill="#333" stroke="#fff" stroke-width="5"/>
-                    <circle cx="160" cy="150" r="30" fill="#333" stroke="#fff" stroke-width="5"/>
-                    <path d="M40 150 L80 90 L150 90 L160 150" stroke="#FF7B00" stroke-width="15" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                    <circle cx="100" cy="50" r="25" fill="#FFC857"/> <rect x="85" y="75" width="30" height="40" rx="10" fill="#2A2A2A"/> <rect x="50" y="70" width="50" height="40" rx="5" fill="#D4A373"/> </svg>
-            </div>
+    <h1>
+      أسرع livreur<br>
+      لإيصال طلباتك
+    </h1>
 
-            <button class="btn-3d" id="cta-btn">اطلب مندوبك الآن</button>
-        </div>
+    <p>
+      توصيل احترافي، سريع وآمن لجميع المدن.
+      اطلب الآن ووصل طلبك في وقت قياسي.
+    </p>
+
+    <button class="cta">اطلب الآن</button>
+  </div>
+
+  <div class="hero-img" id="tilt">
+    <img src="https://cdn-icons-png.flaticon.com/512/2922/2922510.png" alt="">
+  </div>
+
+</section>
+
+<!-- =========================
+     FEATURES
+========================= -->
+
+<section class="features">
+
+  <h2 class="section-title">لماذا نحن الأفضل؟</h2>
+
+  <div class="cards">
+
+    <div class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/2830/2830303.png">
+      <h3>توصيل سريع</h3>
+      <p>نصل في أسرع وقت ممكن</p>
     </div>
 
-    <script>
-        gsap.registerPlugin(ScrollTrigger);
+    <div class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/1048/1048315.png">
+      <h3>تتبع مباشر</h3>
+      <p>راقب طلبك لحظة بلحظة</p>
+    </div>
 
-        // إعداد الجدول الزمني للتمرير (Timeline)
-        let tl = gsap.timeline({
-            scrollTrigger: {
-                trigger: ".scroll-container",
-                start: "top top",
-                end: "bottom bottom",
-                scrub: 1, // ربط الأنيميشن بالتمرير بنعومة
-            }
-        });
+    <div class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png">
+      <h3>ثقة وأمان</h3>
+      <p>طلباتك في أيدٍ أمينة</p>
+    </div>
 
-        // المرحلة 1: دخول المندوب إلى الشاشة
-        tl.to("#livreur", {
-            right: "40%", 
-            duration: 2,
-            ease: "power1.inOut"
-        })
-        .to("#main-text", {
-            innerText: "نتخطى الزحام...",
-            duration: 1
-        }, "<") // يتغير النص مع الدخول
-        
-        // المرحلة 2: الطرود تتطاير في الخلفية (تأثير 3D)
-        .to(".package", {
-            opacity: 1,
-            y: -100,
-            rotation: "+=180",
-            duration: 2,
-            stagger: 0.5,
-            ease: "back.out(1.7)"
-        })
+  </div>
 
-        // المرحلة 3: المندوب يصل للوجهة (يسار الشاشة)
-        .to("#livreur", {
-            right: "80%",
-            duration: 2,
-            ease: "power2.inOut"
-        })
-        .to("#main-text", {
-            innerText: "طلبك وصل!",
-            scale: 1.2,
-            color: "#FF7B00",
-            duration: 1
-        }, "<")
+</section>
 
-        // المرحلة 4: ظهور زر الطلب
-        .to("#cta-btn", {
-            opacity: 1,
-            y: -20,
-            duration: 1,
-            ease: "bounce.out"
-        });
+<!-- =========================
+     STATS
+========================= -->
 
-        // تأثير اهتزاز مستمر للدراجة لتبدو وكأنها تتحرك
-        gsap.to("#livreur", {
-            y: 5,
-            rotation: 1,
-            repeat: -1,
-            yoyo: true,
-            duration: 0.1,
-            ease: "sine.inOut"
-        });
+<section class="stats">
 
-        // تفاعل دقيق: عند الضغط على المندوب
-        function honk() {
-            gsap.to("#livreur", {
-                scale: 1.2,
-                rotation: -10,
-                duration: 0.1,
-                yoyo: true,
-                repeat: 1
-            });
-            // يمكن إضافة صوت هنا (Audio object)
-        }
-    </script>
+  <div class="stat">
+    <h3>+2500</h3>
+    <p>طلب تم توصيله</p>
+  </div>
+
+  <div class="stat">
+    <h3>15min</h3>
+    <p>متوسط التوصيل</p>
+  </div>
+
+  <div class="stat">
+    <h3>+12</h3>
+    <p>مدينة مخدومة</p>
+  </div>
+
+</section>
+
+<footer>
+© 2026 Service Livreur
+</footer>
+
+<script>
+
+/* =========================
+   3D TILT EFFECT
+========================= */
+
+const tilt = document.getElementById("tilt");
+
+document.addEventListener("mousemove",(e)=>{
+  let x = (window.innerWidth/2 - e.clientX)/25;
+  let y = (window.innerHeight/2 - e.clientY)/25;
+  tilt.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+});
+
+</script>
+
 </body>
 </html>
