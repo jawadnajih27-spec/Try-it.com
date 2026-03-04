@@ -1,359 +1,89 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجر النخبة | NJSERVICES Professional Store</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Modern Design</title>
     <style>
-        :root {
-            --gold: #d4af37;
-            --dark: #0a0a0a;
-            --white: #ffffff;
-            --gray: #1a1a1a;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        body { background-color: var(--dark); color: var(--white); overflow-x: hidden; }
-
+        .dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
         header {
-            padding: 15px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(10px);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid var(--gold);
+            padding: 1rem;
+            background-color: #007bff;
+            color: white;
         }
-
-        .logo { font-size: 1.5rem; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; }
-
-        .cart-icon { position: relative; cursor: pointer; font-size: 1.3rem; color: var(--gold); }
-        .cart-count {
-            position: absolute; top: -10px; right: -15px;
-            background: var(--gold); color: var(--dark);
-            font-size: 0.7rem; padding: 2px 6px; border-radius: 50%; font-weight: bold;
+        .toggle {
+            cursor: pointer;
         }
-
-        .hero {
-            height: 60vh;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2070') center/cover;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
+        main {
+            padding: 2rem;
         }
-
-        .hero h1 { font-size: 3rem; color: var(--gold); margin-bottom: 10px; }
-
-        .container { padding: 50px 5%; }
-        .products-grid {
+        .products {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
         }
-
-        .product-card {
-            background: var(--gray);
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid #333;
-            transition: var(--transition);
+        .product {
+            border: 1px solid #ccc;
+            padding: 1rem;
             position: relative;
-            overflow: hidden;
         }
-
-        .product-card::before {
-            content: '';
+        .badge {
             position: absolute;
             top: 10px;
-            right: 10px;
-            background: linear-gradient(135deg, var(--gold), #ffcd4f);
-            padding: 5px 10px;
+            left: 10px;
+            background-color: red;
+            color: white;
+            padding: 0.5rem;
             border-radius: 5px;
-            font-size: 0.7rem;
-            z-index: 10;
         }
-
-        .product-card.digital::before {
-            content: '🔐 رقمي';
-            color: var(--dark);
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        input[type="text"] {
+            padding: 0.5rem;
+            margin: 1rem 0;
+            width: 100%;
         }
-
-        .product-card:hover { border-color: var(--gold); transform: translateY(-10px); }
-
-        .product-img { width: 100%; height: 250px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; }
-
-        .product-title { font-size: 1.2rem; margin-bottom: 10px; font-weight: 600; }
-        .product-price { color: var(--gold); font-weight: 700; font-size: 1.3rem; margin-bottom: 15px; }
-
-        .btn-add {
-            width: 100%; padding: 12px; background: transparent; color: var(--gold);
-            border: 1px solid var(--gold); border-radius: 8px; cursor: pointer;
-            font-weight: bold; transition: var(--transition);
-        }
-
-        .btn-add:hover { background: var(--gold); color: var(--dark); }
-
-        .cart-sidebar {
-            position: fixed; top: 0; left: -100%; width: 350px; height: 100%;
-            background: var(--gray); z-index: 2000; transition: 0.5s;
-            padding: 30px; box-shadow: 5px 0 15px rgba(0,0,0,0.5);
-            display: flex; flex-direction: column;
-        }
-
-        .cart-sidebar.active { left: 0; }
-
-        .cart-header { display: flex; justify-content: space-between; margin-bottom: 30px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-
-        .cart-items { flex: 1; overflow-y: auto; }
-        .cart-item { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #444; padding-bottom: 10px; align-items: center; }
-
-        .cart-item span:first-child { flex: 1; }
-        .cart-item .remove-btn { color: #ff4444; cursor: pointer; margin-left: 10px; }
-
-        .cart-footer { padding-top: 20px; border-top: 1px solid var(--gold); }
-        .total-price { font-size: 1.5rem; text-align: center; margin-bottom: 20px; }
-
-        .btn-checkout {
-            width: 100%; padding: 15px; background: #25d366; color: white;
-            border: none; border-radius: 10px; font-weight: bold; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-
-        footer { text-align: center; padding: 40px; background: #050505; border-top: 1px solid #222; margin-top: 50px; }
-        .nj-badge { color: var(--gold); text-decoration: none; font-weight: bold; }
-
-        @media (max-width: 768px) { .cart-sidebar { width: 100%; } }
     </style>
 </head>
 <body>
-
     <header>
-        <div class="logo">NJ ELITE STORE</div>
-        <div class="cart-icon" onclick="toggleCart()">
-            <i class="fas fa-shopping-bag"></i>
-            <span class="cart-count" id="cart-count">0</span>
-        </div>
+        <h1>My Online Store</h1>
+        <div class="toggle" onclick="toggleDarkMode()">Toggle Dark Mode</div>
     </header>
-
-    <section class="hero">
-        <h1>مجموعة الفخامة 2026</h1>
-        <p>تصميم حصري.. جودة استثنائية</p>
-    </section>
-
-    <div class="container">
-        <div class="products-grid">
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999" class="product-img">
-                <h3 class="product-title">ساعة نيو كلاسيك الذهبية</h3>
-                <div class="product-price">250 $</div>
-                <button class="btn-add" onclick="addToCart('ساعة نيو كلاسيك الذهبية', 250)">إضافة للسلة</button>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1583394838336-acd977730f90?q=80&w=1968" class="product-img">
-                <h3 class="product-title">سماعات بريميوم عازلة</h3>
-                <div class="product-price">180 $</div>
-                <button class="btn-add" onclick="addToCart('سماعات بريميوم عازلة', 180)">إضافة للسلة</button>
-            </div>
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1524289286702-f07229da36f5?q=80&w=2070" class="product-img">
-                <h3 class="product-title">عطر النخبة الأسود</h3>
-                <div class="product-price">120 $</div>
-                <button class="btn-add" onclick="addToCart('عطر النخبة الأسود', 120)">إضافة للسلة</button>
-            </div>
-
-            <div class="product-card digital">
-                <img src="https://images.unsplash.com/photo-1453928582365-b6ad33cbcf64?q=80&w=2070" class="product-img">
-                <h3 class="product-title">دورة الربح من التجارة الإلكترونية</h3>
-                <div class="product-price">99 $</div>
-                <button class="btn-add" onclick="addToCart('دورة الربح من التجارة الإلكترونية', 99)">إضافة للسلة</button>
-            </div>
-
-            <div class="product-card digital">
-                <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=2070" class="product-img">
-                <h3 class="product-title">📚 كتاب: أسرار التسويق الرقمي</h3>
-                <div class="product-price">25 $</div>
-                <button class="btn-add" onclick="addToCart('كتاب: أسرار التسويق الرقمي', 25)">إضافة للسلة</button>
-            </div>
-
-            <div class="product-card digital">
-                <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=2070" class="product-img">
-                <h3 class="product-title">🎨 باقة تصاميم سوشيال ميديا</h3>
-                <div class="product-price">39 $</div>
-                <button class="btn-add" onclick="addToCart('باقة تصاميم سوشيال ميديا جاهزة', 39)">إضافة للسلة</button>
-            </div>
-
-            <div class="product-card digital">
-                <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070" class="product-img">
-                <h3 class="product-title">🤖 اشتراك أداة الذكاء الصناعي</h3>
-                <div class="product-price">15 $</div>
-                <button class="btn-add" onclick="addToCart('اشتراك أداة الذكاء الصناعي', 15)">إضافة للسلة</button>
-            </div>
-
-            <div class="product-card digital">
-                <img src="https://images.unsplash.com/photo-1516321318423-f06f70d504d0?q=80&w=2070" class="product-img">
-                <h3 class="product-title">🎬 دورة المونتاج باحتراف</h3>
-                <div class="product-price">59 $</div>
-                <button class="btn-add" onclick="addToCart('دورة المونتاج باحتراف', 59)">إضافة للسلة</button>
-            </div>
-
-            <div class="product-card digital">
-                <img src="https://images.unsplash.com/photo-1432888498266-38c75b13b636?q=80&w=2070" class="product-img">
-                <h3 class="product-title">💰 دورة ربح المال من الإنترنت</h3>
-                <div class="product-price">79 $</div>
-                <button class="btn-add" onclick="addToCart('دورة ربح المال من الإنترنت', 79)">إضافة للسلة</button>
-            </div>
-
-            <div class="product-card digital">
-                <img src="https://images.unsplash.com/photo-1516321495827-16e4b20205ab?q=80&w=2070" class="product-img">
-                <h3 class="product-title">📖 معهد إتقان SEO والكلمات المفتاحية</h3>
-                <div class="product-price">49 $</div>
-                <button class="btn-add" onclick="addToCart('معهد إتقان SEO والكلمات المفتاحية', 49)">إضافة للسلة</button>
-            </div>
-
-            <div class="product-card digital">
-                <img src="https://images.unsplash.com/photo-1460925895917-adf4e565f900?q=80&w=2070" class="product-img">
-                <h3 class="product-title">📊 قالب متجر إلكتروني جاهز</h3>
-                <div class="product-price">35 $</div>
-                <button class="btn-add" onclick="addToCart('قالب متجر إلكتروني جاهز', 35)">إضافة للسلة</button>
-            </div>
-
-            <div class="product-card digital">
-                <img src="https://images.unsplash.com/photo-1611532736000-6d6c75f683ac?q=80&w=2070" class="product-img">
-                <h3 class="product-title">🎯 باقة 100 قالب Canva احترافية</h3>
-                <div class="product-price">29 $</div>
-                <button class="btn-add" onclick="addToCart('باقة 100 قالب Canva احترافية', 29)">إضافة للسلة</button>
-            </div>
-
-            <div class="product-card digital">
-                <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=2070" class="product-img">
-                <h3 class="product-title">🎤 دورة التسويق بالعمولة</h3>
-                <div class="product-price">69 $</div>
-                <button class="btn-add" onclick="addToCart('دورة التسويق بالعمولة', 69)">إضافة للسلة</button>
-            </div>
+    <main>
+        <input type="text" placeholder="Search products..." id="search" onkeyup="filterProducts()">
+        <div class="products" id="product-list">
+            <div class="product"><div class="badge">New</div>Product 1</div>
+            <div class="product"><div class="badge">Bestselling</div>Product 2</div>
+            <div class="product">Product 3</div>
+            <div class="product">Product 4</div>
         </div>
-    </div>
-
-    <div class="cart-sidebar" id="cartSidebar">
-        <div class="cart-header">
-            <h3>سلتك 🛒</h3>
-            <i class="fas fa-times" onclick="toggleCart()" style="cursor:pointer; font-size: 1.3rem;"></i>
-        </div>
-        <div class="cart-items" id="cartItems">
-            <p style="text-align: center; color: #999; margin-top: 50px;">السلة فارغة 📭</p>
-        </div>
-        <div class="cart-footer">
-            <div class="total-price">الإجمالي: <span id="totalPrice">0</span> $</div>
-            <button class="btn-checkout" onclick="checkoutWhatsApp()">
-                <i class="fab fa-whatsapp"></i> إتمام الطلب عبر واتساب
-            </button>
-        </div>
-    </div>
-
-    <footer>
-        <p>© 2026 جميع الحقوق محفوظة لمتجر النخبة</p>
-        <p>صمم بواسطة <a href="https://njservices.com" class="nj-badge">NJSERVICES.com</a></p>
-    </footer>
-
+    </main>
     <script>
-        let cart = [];
-        let total = 0;
-
-        function toggleCart() {
-            document.getElementById('cartSidebar').classList.toggle('active');
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
         }
-
-        function addToCart(name, price) {
-            cart.push({name, price, id: Date.now()});
-            updateCart();
-            showNotification(name);
-            document.querySelector('.cart-icon').style.animation = 'bounce 0.5s';
-            setTimeout(() => {
-                document.querySelector('.cart-icon').style.animation = '';
-            }, 500);
-        }
-
-        function removeFromCart(id) {
-            cart = cart.filter(item => item.id !== id);
-            updateCart();
-        }
-
-        function updateCart() {
-            const cartItemsElement = document.getElementById('cartItems');
-            const cartCountElement = document.getElementById('cart-count');
-            const totalPriceElement = document.getElementById('totalPrice');
-            
-            cartItemsElement.innerHTML = '';
-            total = 0;
-
-            if(cart.length === 0) {
-                cartItemsElement.innerHTML = '<p style="text-align: center; color: #999; margin-top: 50px;">السلة فارغة 📭</p>';
-            } else {
-                cart.forEach((item) => {
-                    total += item.price;
-                    cartItemsElement.innerHTML += `
-                        <div class="cart-item">
-                            <span>${item.name}</span>
-                            <div>
-                                <span>${item.price}$</span>
-                                <span class="remove-btn" onclick="removeFromCart(${item.id})">
-                                    <i class="fas fa-trash"></i>
-                                </span>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-
-            cartCountElement.innerText = cart.length;
-            totalPriceElement.innerText = total;
-        }
-
-        function showNotification(productName) {
-            alert('✅ تمت إضافة ' + productName + ' إلى سلتك بنجاح!');
-        }
-
-        function checkoutWhatsApp() {
-            if(cart.length === 0) {
-                alert("السلة فارغة! 📭 أضف منتجات أولاً.");
-                return;
-            }
-            
-            let message = "*🛍️ طلب جديد من متجر النخبة*\n";
-            message += "━━━━━━━━━━━━━━━━━\n";
-            message += "*المنتجات المطلوبة:*\n\n";
-            
-            cart.forEach((item, index) => {
-                message += `${index + 1}️⃣ ${item.name}\n💰 ${item.price}$\n\n`;
+        function filterProducts() {
+            const searchInput = document.getElementById('search').value.toLowerCase();
+            const products = document.getElementsByClassName('product');
+            Array.from(products).forEach(product => {
+                if (product.textContent.toLowerCase().includes(searchInput)) {
+                    product.style.display = '';
+                } else {
+                    product.style.display = 'none';
+                }
             });
-            
-            message += "━━━━━━━━━━━━━━━━━\n";
-            message += `*💵 الإجمالي النهائي: ${total}$*\n\n`;
-            message += "شكراً لتعاملك معنا 🙏";
-            
-            const encodedMessage = encodeURIComponent(message);
-            window.open(`https://wa.me/212703652247?text=${encodedMessage}`, '_blank');
         }
-
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes bounce {
-                0%, 100% { transform: scale(1); }
-                50% { transform: scale(1.2); }
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
