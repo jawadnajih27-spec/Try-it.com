@@ -1,53 +1,180 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Store</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
+    <title>NJWORKS | فريلانسر محترف</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0211;
+            --primary-purple: #9d4edd;
+            --light-purple: #c77dff;
+            --text-color: #f8f9fa;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-color);
+            overflow-x: hidden;
+            transition: background-color 0.5s ease;
+        }
+
+        /* حالة الإضاءة (عند سحب المصباح) */
+        body.lights-on {
+            background: radial-gradient(circle at 50% 30%, #3c096c, var(--bg-dark));
+        }
+
+        /* شريط التنقل */
+        header {
+            padding: 30px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+        .logo { font-size: 1.8rem; font-weight: 900; color: var(--light-purple); letter-spacing: 2px; }
+        .nav-links a { color: var(--text-color); text-decoration: none; margin-right: 20px; font-weight: 700; transition: 0.3s; }
+        .nav-links a:hover { color: var(--primary-purple); }
+
+        /* قسم المصباح التفاعلي (Cute Lamp) */
+        .lamp-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 5;
+        }
+
+        .lamp-wire { width: 4px; height: 100px; background-color: #333; }
+        
+        .lamp-shade {
+            width: 120px;
+            height: 80px;
+            background-color: #222;
+            border-top-left-radius: 60px;
+            border-top-right-radius: 60px;
+            position: relative;
+            transition: background-color 0.3s ease;
+        }
+
+        .lamp-cord-wrapper {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: pointer;
+            height: 70px; /* مساحة السحب */
+        }
+
+        .pull-cord {
+            width: 4px;
+            height: 40px;
+            background-color: #ff9e00;
+            transition: height 0.2s ease;
+        }
+        
+        .pull-cord::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: -6px;
+            width: 16px;
+            height: 16px;
+            background-color: #ff9e00;
+            border-radius: 50%;
+        }
+
+        .lamp-cord-wrapper:active .pull-cord { height: 60px; }
+
+        /* تأثير الإضاءة للمصباح نفسه */
+        body.lights-on .lamp-shade { background-color: var(--primary-purple); box-shadow: 0 20px 60px var(--primary-purple); }
+        body.lights-on .lamp-wire { background-color: #555; }
+
+        /* المحتوى الرئيسي (مخفي جزئياً في الظلام) */
+        .hero-section {
+            text-align: center;
+            padding: 180px 20px 100px;
+            opacity: 0.2;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+        }
+
+        body.lights-on .hero-section { opacity: 1; transform: translateY(0); }
+
+        .hero-section h1 { font-size: 3.5rem; margin-bottom: 20px; color: var(--light-purple); }
+        .hero-section p { font-size: 1.2rem; margin-bottom: 40px; max-width: 600px; margin-inline: auto; color: #aaa; }
+
+        /* الأزرار الاحترافية */
+        .btn-group { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .btn {
+            padding: 15px 40px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .btn-primary { background-color: var(--primary-purple); color: white; border: 2px solid var(--primary-purple); }
+        .btn-primary:hover { background-color: transparent; box-shadow: 0 0 20px var(--primary-purple); }
+        .btn-outline { background-color: transparent; color: var(--light-purple); border: 2px solid var(--light-purple); }
+        .btn-outline:hover { background-color: var(--light-purple); color: var(--bg-dark); }
+
+        /* تعليمات للمستخدم */
+        .instruction {
+            margin-top: -120px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            animation: pulse 2s infinite;
+        }
+        body.lights-on .instruction { display: none; }
+
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        @media (max-width: 768px) { .hero-section h1 { font-size: 2.5rem; } }
+    </style>
 </head>
 <body>
+
     <header>
-        <h1>Welcome to Our Enhanced Store</h1>
-        <input type="text" id="searchBar" placeholder="Search products...">
-        <div class="category-filters">
-            <button class="filter-btn">All</button>
-            <button class="filter-btn">Digital</button>
-            <button class="filter-btn">Physical</button>
-        </div>
+        <div class="logo">NJWORKS.</div>
+        <nav class="nav-links">
+            <a href="#">خدماتي</a>
+            <a href="#">أعمالي</a>
+        </nav>
     </header>
-    <main>
-        <section class="products">
-            <div class="product" id="product1">
-                <h2>Product Title 1</h2>
-                <p>Description for product 1.</p>
+
+    <div class="lamp-container">
+        <div class="lamp-wire"></div>
+        <div class="lamp-shade">
+            <div class="lamp-cord-wrapper" onclick="toggleLight()">
+                <div class="pull-cord"></div>
             </div>
-            <div class="product" id="product2">
-                <h2>Product Title 2</h2>
-                <p>Description for product 2.</p>
-            </div>
-            <!-- More products can be added here -->
-        </section>
-    </main>
-    <section class="testimonials">
-        <h2>Customer Testimonials</h2>
-        <div class="testimonial">
-            <p>"Great products! Highly recommend!" - Customer A</p>
         </div>
-        <div class="testimonial">
-            <p>"Amazing service and fast delivery!" - Customer B</p>
+    </div>
+
+    <div class="instruction">اضغط على خيط المصباح لإضاءة الصفحة 💡</div>
+
+    <section class="hero-section">
+        <h1>أصنع واجهات تبيع، لا واجهات تُرى فقط</h1>
+        <p>أنا فريلانسر متخصص في بناء صفحات الهبوط والمواقع الإلكترونية التي تحول زوارك إلى عملاء فعليين، باستخدام أحدث التقنيات وأرقى التصاميم.</p>
+        
+        <div class="btn-group">
+            <a href="https://wa.me/212703652247" class="btn btn-primary">وظفني الآن</a>
+            <a href="#" class="btn btn-outline">تصفح سابقة أعمالي</a>
         </div>
     </section>
-    <footer>
-        <p>Follow us on:</p>
-        <a href="#">Facebook</a> | <a href="#">Twitter</a> | <a href="#">Instagram</a>
-    </footer>
+
     <script>
-        // Local storage implementation for cart persistence
-        const cart = [];
-        function saveToLocalStorage() {
-            localStorage.setItem('cart', JSON.stringify(cart));
+        function toggleLight() {
+            document.body.classList.toggle('lights-on');
         }
     </script>
 </body>
