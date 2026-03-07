@@ -1,1 +1,5 @@
-// Stripe payments
+function checkout(){
+
+console.log("Stripe payment initialized")
+
+}
