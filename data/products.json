@@ -1,1 +1,29 @@
-[]
+[
+{
+"id":1,
+"name":"Magnetic Phone Holder",
+"price":19,
+"image":"assets/images/p1.jpg"
+},
+
+{
+"id":2,
+"name":"LED Strip Lights",
+"price":25,
+"image":"assets/images/p2.jpg"
+},
+
+{
+"id":3,
+"name":"Portable Blender",
+"price":39,
+"image":"assets/images/p3.jpg"
+},
+
+{
+"id":4,
+"name":"Smart Watch",
+"price":79,
+"image":"assets/images/p4.jpg"
+}
+]
