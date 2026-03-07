@@ -3,179 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NJWORKS | فريلانسر محترف</title>
+    <title>متجر NJ | تجربة تسوق فريدة</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0a0211;
-            --primary-purple: #9d4edd;
-            --light-purple: #c77dff;
-            --text-color: #f8f9fa;
+            --amazon-dark: #131921;
+            --amazon-light: #232f3e;
+            --gold-light: rgba(212, 175, 55, 0.15);
+            --gold-solid: #d4af37;
+            --white-glass: rgba(255, 255, 255, 0.6);
+            --text-dark: #0f1111;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
 
+        /* خلفية بيضاء ضبابية مع ذهبي فاتح */
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-color);
+            background: linear-gradient(135deg, #ffffff 0%, #fdfbf7 50%, #f9f6ef 100%);
+            color: var(--text-dark);
+            position: relative;
             overflow-x: hidden;
-            transition: background-color 0.5s ease;
+        }
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, var(--gold-light), transparent 70%);
+            backdrop-filter: blur(20px); z-index: -1;
         }
 
-        /* حالة الإضاءة (عند سحب المصباح) */
-        body.lights-on {
-            background: radial-gradient(circle at 50% 30%, #3c096c, var(--bg-dark));
-        }
-
-        /* شريط التنقل */
+        /* شريط Amazon العلوي */
         header {
-            padding: 30px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            z-index: 10;
+            background-color: var(--amazon-dark); color: white;
+            padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100;
         }
-        .logo { font-size: 1.8rem; font-weight: 900; color: var(--light-purple); letter-spacing: 2px; }
-        .nav-links a { color: var(--text-color); text-decoration: none; margin-right: 20px; font-weight: 700; transition: 0.3s; }
-        .nav-links a:hover { color: var(--primary-purple); }
+        .logo { font-size: 1.8rem; font-weight: 900; color: white; letter-spacing: 1px; }
+        .logo span { color: var(--gold-solid); }
+        .nav-actions { display: flex; gap: 20px; align-items: center; }
+        .cart { font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; }
 
-        /* قسم المصباح التفاعلي (Cute Lamp) */
-        .lamp-container {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 5;
+        /* السلايدر (Hero Carousel) */
+        .slider-container {
+            width: 100%; height: 350px; position: relative; overflow: hidden;
+            border-bottom: 2px solid var(--gold-solid);
         }
+        .slide {
+            width: 100%; height: 100%; position: absolute; top: 0; left: 0;
+            opacity: 0; transition: opacity 1s ease-in-out;
+            background-size: cover; background-position: center;
+        }
+        .slide.active { opacity: 1; }
+        .slide-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to right, rgba(0,0,0,0.7), transparent);
+            display: flex; align-items: center; padding: 0 50px;
+        }
+        .slide-text h2 { color: white; font-size: 2.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
 
-        .lamp-wire { width: 4px; height: 100px; background-color: #333; }
+        /* شبكة المنتجات */
+        .container { max-width: 1400px; margin: -50px auto 50px; padding: 0 20px; position: relative; z-index: 10; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+
+        /* بطاقة المنتج (احترافية مع Glassmorphism في الأسفل) */
+        .product-card {
+            background: white; border-radius: 12px; overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative; cursor: pointer; border: 1px solid rgba(0,0,0,0.05);
+            display: flex; flex-direction: column; height: 380px;
+        }
+        .product-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.2);
+            z-index: 20;
+        }
+        .product-img-area { height: 60%; width: 100%; background: #fff; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .product-img { width: 100%; height: 100%; object-fit: contain; padding: 10px; transition: 0.5s; }
+        .product-card:hover .product-img { transform: scale(1.05); }
+
+        /* النصف السفلي الشفاف الضبابي */
+        .product-info {
+            height: 40%; padding: 15px; display: flex; flex-direction: column;
+            background: var(--white-glass);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255,255,255,0.8);
+            position: absolute; bottom: 0; width: 100%;
+        }
+        .product-title { font-size: 1.1rem; font-weight: 700; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 5px; }
+        .product-price { font-size: 1.4rem; font-weight: 900; color: #B12704; margin-top: auto; } /* لون سعر أمازون */
+
+        /* المنبثقة (Modal) */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);
+            display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px;
+        }
+        .modal-content {
+            background: #ffffff; width: 100%; max-width: 900px;
+            border-radius: 16px; display: flex; flex-direction: column;
+            overflow: hidden; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+        @keyframes popIn { 0% { transform: scale(0.8) translateY(50px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
         
-        .lamp-shade {
-            width: 120px;
-            height: 80px;
-            background-color: #222;
-            border-top-left-radius: 60px;
-            border-top-right-radius: 60px;
-            position: relative;
-            transition: background-color 0.3s ease;
-        }
-
-        .lamp-cord-wrapper {
-            position: absolute;
-            bottom: -50px;
-            left: 50%;
-            transform: translateX(-50%);
-            cursor: pointer;
-            height: 70px; /* مساحة السحب */
-        }
-
-        .pull-cord {
-            width: 4px;
-            height: 40px;
-            background-color: #ff9e00;
-            transition: height 0.2s ease;
-        }
+        @media(min-width: 768px) { .modal-content { flex-direction: row; height: 500px; } .modal-img-wrapper { width: 50%; } .modal-details { width: 50%; } }
         
-        .pull-cord::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: -6px;
-            width: 16px;
-            height: 16px;
-            background-color: #ff9e00;
-            border-radius: 50%;
-        }
+        .modal-img-wrapper { background: #f8f8f8; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .modal-img-wrapper img { max-width: 100%; max-height: 400px; object-fit: contain; }
+        
+        .modal-details { padding: 40px; display: flex; flex-direction: column; position: relative; }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; background: none; border: none; color: #555; }
+        .m-title { font-size: 1.8rem; font-weight: 900; margin-bottom: 10px; }
+        .m-price { font-size: 2rem; color: #B12704; font-weight: 700; margin-bottom: 20px; }
+        .m-desc { color: #555; line-height: 1.6; flex-grow: 1; overflow-y: auto; margin-bottom: 20px; }
+        
+        .action-buttons { display: flex; gap: 10px; }
+        .btn { flex: 1; padding: 15px; font-size: 1.1rem; font-weight: bold; border-radius: 8px; border: none; cursor: pointer; transition: 0.2s; }
+        .btn-buy { background: #FFD814; color: #0f1111; box-shadow: 0 2px 5px rgba(213,217,217,.5); } /* زر أمازون الأصفر */
+        .btn-buy:hover { background: #F7CA00; }
+        .btn-details { background: #FFA41C; color: #0f1111; } /* زر أمازون البرتقالي */
+        .btn-details:hover { background: #FA8900; }
 
-        .lamp-cord-wrapper:active .pull-cord { height: 60px; }
-
-        /* تأثير الإضاءة للمصباح نفسه */
-        body.lights-on .lamp-shade { background-color: var(--primary-purple); box-shadow: 0 20px 60px var(--primary-purple); }
-        body.lights-on .lamp-wire { background-color: #555; }
-
-        /* المحتوى الرئيسي (مخفي جزئياً في الظلام) */
-        .hero-section {
-            text-align: center;
-            padding: 180px 20px 100px;
-            opacity: 0.2;
-            transform: translateY(20px);
-            transition: all 0.8s ease;
-        }
-
-        body.lights-on .hero-section { opacity: 1; transform: translateY(0); }
-
-        .hero-section h1 { font-size: 3.5rem; margin-bottom: 20px; color: var(--light-purple); }
-        .hero-section p { font-size: 1.2rem; margin-bottom: 40px; max-width: 600px; margin-inline: auto; color: #aaa; }
-
-        /* الأزرار الاحترافية */
-        .btn-group { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-        .btn {
-            padding: 15px 40px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .btn-primary { background-color: var(--primary-purple); color: white; border: 2px solid var(--primary-purple); }
-        .btn-primary:hover { background-color: transparent; box-shadow: 0 0 20px var(--primary-purple); }
-        .btn-outline { background-color: transparent; color: var(--light-purple); border: 2px solid var(--light-purple); }
-        .btn-outline:hover { background-color: var(--light-purple); color: var(--bg-dark); }
-
-        /* تعليمات للمستخدم */
-        .instruction {
-            margin-top: -120px;
-            text-align: center;
-            font-size: 0.9rem;
-            color: #666;
-            animation: pulse 2s infinite;
-        }
-        body.lights-on .instruction { display: none; }
-
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
-        @media (max-width: 768px) { .hero-section h1 { font-size: 2.5rem; } }
+        .empty-state { text-align: center; padding: 50px; font-size: 1.2rem; color: #777; grid-column: 1/-1; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">NJWORKS.</div>
-        <nav class="nav-links">
-            <a href="#">خدماتي</a>
-            <a href="#">أعمالي</a>
-        </nav>
+        <div class="logo">NJ<span>STORE</span></div>
+        <div class="nav-actions">
+            <div class="cart">🛒 السلة <span style="color: var(--gold-solid); margin-right: 5px;">0</span></div>
+        </div>
     </header>
 
-    <div class="lamp-container">
-        <div class="lamp-wire"></div>
-        <div class="lamp-shade">
-            <div class="lamp-cord-wrapper" onclick="toggleLight()">
-                <div class="pull-cord"></div>
-            </div>
+    <div class="slider-container" id="hero-slider">
+        <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=1600&q=80');">
+            <div class="slide-overlay"><div class="slide-text"><h2>أفضل العروض الحصرية</h2></div></div>
+        </div>
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=1600&q=80');">
+            <div class="slide-overlay"><div class="slide-text"><h2>تسوق أحدث المنتجات</h2></div></div>
+        </div>
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=1600&q=80');">
+            <div class="slide-overlay"><div class="slide-text"><h2>جودة لا تضاهى، بأسعار تنافسية</h2></div></div>
         </div>
     </div>
 
-    <div class="instruction">اضغط على خيط المصباح لإضاءة الصفحة 💡</div>
+    <div class="container">
+        <div class="products-grid" id="main-grid"></div>
+    </div>
 
-    <section class="hero-section">
-        <h1>أصنع واجهات تبيع، لا واجهات تُرى فقط</h1>
-        <p>أنا فريلانسر متخصص في بناء صفحات الهبوط والمواقع الإلكترونية التي تحول زوارك إلى عملاء فعليين، باستخدام أحدث التقنيات وأرقى التصاميم.</p>
-        
-        <div class="btn-group">
-            <a href="https://wa.me/212703652247" class="btn btn-primary">وظفني الآن</a>
-            <a href="#" class="btn btn-outline">تصفح سابقة أعمالي</a>
-        </div>
-    </section>
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content" id="modal-data"></div>
+    </div>
 
     <script>
-        function toggleLight() {
-            document.body.classList.toggle('lights-on');
+        // 1. تشغيل السلايدر التلقائي
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        setInterval(() => {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }, 4000); // يتغير كل 4 ثواني
+
+        // 2. إدارة المنتجات
+        const grid = document.getElementById('main-grid');
+        const modal = document.getElementById('modal');
+        let allProducts = [];
+
+        function initStore() {
+            allProducts = JSON.parse(localStorage.getItem('nj_products')) || [];
+            if (allProducts.length === 0) {
+                grid.innerHTML = '<div class="empty-state">المتجر فارغ حالياً. قم بإضافة المنتجات من لوحة التحكم.</div>';
+                return;
+            }
+            renderProducts(allProducts);
         }
+
+        function renderProducts(products) {
+            grid.innerHTML = products.map((p, index) => {
+                let imagePath = p.image || '';
+                return `
+                <div class="product-card" onclick="openDetails('${p.id}')">
+                    <div class="product-img-area">
+                        <img src="${imagePath}" class="product-img" onerror="this.src='https://via.placeholder.com/400x400/fff/333?text=Product'">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-title">${p.name}</div>
+                        <div class="product-price">${p.price} MAD</div>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        function openDetails(productId) {
+            const p = allProducts.find(item => item.id == productId);
+            if(!p) return;
+
+            document.getElementById('modal-data').innerHTML = `
+                <div class="modal-img-wrapper">
+                    <img src="${p.image}" onerror="this.src='https://via.placeholder.com/600x600/fff/333?text=Image'">
+                </div>
+                <div class="modal-details">
+                    <button class="close-btn" onclick="closeModal()">✕</button>
+                    <div style="color: #007185; font-weight: bold; margin-bottom: 5px;">${p.category || 'عام'}</div>
+                    <h2 class="m-title">${p.name}</h2>
+                    <div class="m-price">${p.price} MAD</div>
+                    <p class="m-desc">${p.description || 'تفاصيل المنتج غير متوفرة حالياً.'}</p>
+                    <div class="action-buttons">
+                        <button class="btn btn-buy" onclick="orderNow('${p.name}', '${p.price}', event)">شراء الآن</button>
+                        <button class="btn btn-details" onclick="event.stopPropagation(); alert('مزيد من التفاصيل قريباً!');">تفاصيل</button>
+                    </div>
+                </div>
+            `;
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function orderNow(name, price, event) {
+            event.stopPropagation(); // لمنع إغلاق المنبثقة
+            const phone = "212600000000"; 
+            const msg = `طلب جديد:\nالمنتج: ${name}\nالسعر: ${price} درهم`;
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        window.onclick = (e) => { if(e.target == modal) closeModal(); }
+        document.addEventListener('DOMContentLoaded', initStore);
     </script>
 </body>
 </html>
